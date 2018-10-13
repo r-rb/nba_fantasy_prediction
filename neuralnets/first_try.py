@@ -73,7 +73,7 @@ def run_model(X_train, X_test, y_train, y_test, input_output_neurons, hidden_neu
     score = model.evaluate(X_test, y_test, batch_size=1)
 
     print(model.metrics_names)  
-    pprint(score)    
+    print(score)    
 
     y_pred = model.predict(X_test)
     plt.plot(list(range(train_n,len(y))),y_pred,'r')
