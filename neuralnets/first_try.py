@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pprint as pp
 from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential
-from keras.layers import Dense, Activation
+from keras.layers import Dense, Activation,Dropout
 
 def load_in(path):
     return pickle.load(open(path,'rb'))
@@ -29,6 +29,7 @@ model = Sequential()
 # Add layers (perhaps add this to a loop)
 model.add(Dense(32, activation='relu', input_dim=95))
 model.add(Dense(16, activation='relu'))
+model.add(Dropout(0.22))
 model.add(Dense(1, activation='relu'))
 
 # Choose the loss and optimisation scheme.
@@ -44,9 +45,14 @@ y_test = y[train_n:]
 print(np.shape(X))
 print(np.shape(X_train))
 print(np.shape(X_test))
-model.fit(X_train, y_train, epochs=1, batch_size=1)
-score = model.evaluate(X_test, y_test, batch_size=1)
+model.fit(X_train, y_train, epochs=500, batch_size=5,verbose= 1)
+score = model.evaluate(X_test, y_test, batch_size=5)
 
+
+prediction = model.predict(X_test)
+plt.plot(list(range(len(X_test))),prediction,'r')
+plt.plot(list(range(len(X_test))),y_test,'b')
+plt.show()
 print(model.metrics_names)
 print(score)
 
