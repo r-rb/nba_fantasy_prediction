@@ -45,8 +45,8 @@ def shape_data( filename):
     print(np.shape(X_test))
     print(np.shape(y_train))
 
-    X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
-    X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+    X_train = np.reshape(X_train, (X_train.shape[0],1, X_train.shape[1]))
+    X_test = np.reshape(X_test, (X_test.shape[0], 1,X_test.shape[1]))
 
     return (X_train, X_test, y_train, y_test, train_n,y)
 
@@ -57,7 +57,7 @@ def run_model(X_train, X_test, y_train, y_test, input_output_neurons, hidden_neu
         
     # Add layers (perhaps add this to a loop)
     model = Sequential()
-    model.add(GRU(input_output_neurons, input_shape=(None, 1), unroll=False, return_sequences=True))
+    model.add(GRU(input_output_neurons, unroll=False, return_sequences=True))
     model.add(GRU(hidden_neurons, input_shape=(hidden_neurons,), return_sequences=False))
     model.add((Dense(1)))
     model.add(Activation("linear"))
@@ -69,15 +69,13 @@ def run_model(X_train, X_test, y_train, y_test, input_output_neurons, hidden_neu
 
     tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
 
-    x = model.fit(X_train, y_train, epochs=100, batch_size=20, validation_data= (X_test, y_test),shuffle = False,callbacks = [tensorboard])
+    x = model.fit(X_train, y_train, epochs=3000, batch_size=20, validation_data= (X_test, y_test),shuffle = False,callbacks = [tensorboard])
     score = model.evaluate(X_test, y_test, batch_size=1)
 
-
-    pp.pprint(score)    
-    print(model.metrics_names)
+    print(model.metrics_names)  
+    pprint(score)    
 
     y_pred = model.predict(X_test)
-    pp.pprint(X_test)
     plt.plot(list(range(train_n,len(y))),y_pred,'r')
     plt.axhline(y = np.average(y))
     plt.plot(list(range(train_n,len(y))),y[train_n:],'b')
