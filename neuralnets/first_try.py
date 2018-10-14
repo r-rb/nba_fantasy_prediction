@@ -22,7 +22,6 @@ def coeff_determination(y_true, y_pred):
 def get_model(model):
     model.save('../my_model.h5')
 
-
 def shape_data( filename):
     player = load_in(filename)
     X = player['X'][:-1]
@@ -50,9 +49,6 @@ def shape_data( filename):
 
     return (X_train, X_test, y_train, y_test, train_n,y)
 
-
-
-
 def run_model(X_train, X_test, y_train, y_test, input_output_neurons, hidden_neurons, train_n,y):
         
     # Add layers (perhaps add this to a loop)
@@ -69,11 +65,12 @@ def run_model(X_train, X_test, y_train, y_test, input_output_neurons, hidden_neu
 
     tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
 
-    x = model.fit(X_train, y_train, epochs=3000, batch_size=20, validation_data= (X_test, y_test),shuffle = False,callbacks = [tensorboard])
+    model.fit(X_train, y_train, epochs=1, batch_size=20, validation_data= (X_test, y_test),shuffle = False,callbacks = [tensorboard])
     score = model.evaluate(X_test, y_test, batch_size=1)
 
     print(model.metrics_names)  
-    print(score)    
+    print(score) 
+    print(model.summary())  
 
     y_pred = model.predict(X_test)
     plt.plot(list(range(train_n,len(y))),y_pred,'r')
