@@ -14,7 +14,7 @@ def order_by_variance():
     player_data = load_in('data/player_game_table.pkl')
     player_ids = load_in('data/player_vs_table.pkl')
 
-    d = {'player_id': [], 'var': []}
+    d = {'player_id': [], 'var': [],'name': []}
  
 
     k = []
@@ -25,8 +25,16 @@ def order_by_variance():
         l = z.var()    
         d['player_id'].append(row['player_vs_id'])
         d['var'].append(l)
+        d['name'].append(x['player_name'])
 
     df = pd.DataFrame(data = d)  
     df.to_pickle('data/player_variance')      
 
 
+def findPlayers():
+    x = load_in('data/player_variance')
+    x.sort_values('var',inplace=True)
+    x.to_csv('np.csv',sep=' ')
+
+
+findPlayers()
